@@ -919,6 +919,7 @@ GameObject:
   - component: {fileID: 1443592174}
   - component: {fileID: 1443592175}
   - component: {fileID: 1443592176}
+  - component: {fileID: 1443592177}
   m_Layer: 0
   m_Name: khight_with_sword
   m_TagString: Untagged
@@ -986,7 +987,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1443592171}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.336, y: -2.72, z: 0}
+  m_LocalPosition: {x: -9.041, y: -2.726, z: 0}
   m_LocalScale: {x: 1.8, y: 1.8, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1008,7 +1009,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 1.6
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -1052,6 +1053,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab2da6a155b114f46beeb0f298ed10ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _horizontalSpeed: 8
+  _faceRight: 1
+  _jumpForce: 520
+  _gravityScale: 1.6
+--- !u!114 &1443592177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1443592171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00de51b0aee1b1e4484fdb4722db03d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerEntity: {fileID: 1443592176}
 --- !u!1 &1654866872
 GameObject:
   m_ObjectHideFlags: 0
