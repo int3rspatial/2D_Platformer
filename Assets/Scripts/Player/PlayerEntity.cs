@@ -26,7 +26,7 @@ namespace Player
         private Rigidbody2D _rigidbody;
 
         //private float _sizeModificator;
-        private bool _isJumping;
+        [SerializeField]  private bool _isJumping;
         private float _startJumpVerticalPosition;
 
         // Start is called before the first frame update
