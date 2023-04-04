@@ -15,10 +15,11 @@ public class InputReader : MonoBehaviour
         {
             _playerEntity.Jump();
         }
-        //else if (Input.GetButtonDown("Fire1"))
-        //{
-        //    _playerEntity.
-        //}
+        
+        if (Input.GetButtonDown("Fire1"))
+        {
+            _playerEntity.StartAttack();
+        }
     }
 
     private void FixedUpdate()

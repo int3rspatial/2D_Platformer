@@ -10,7 +10,7 @@ namespace Player
     public class PlayerEntity : MonoBehaviour
     {
         [Header("Animation")]
-        [SerializeField] private Animator _animator;
+        [SerializeField] private AnimationController _animator;
 
         [Header("HorizontalMovement")]
         [SerializeField] private float _horizontalSpeed;
@@ -56,9 +56,9 @@ namespace Player
 
         private void UpdateAnimations()
         {
-            PlayAnimation(AnimationType.Idle, true);
-            PlayAnimation(AnimationType.Walk, _movement.magnitude > 0);
-            PlayAnimation(AnimationType.Jump, _isJumping);
+            _animator.PlayAnimation(AnimationType.Idle, true);
+            _animator.PlayAnimation(AnimationType.Walk, _movement.magnitude > 0);
+            _animator.PlayAnimation(AnimationType.Jump, _isJumping);
         }
 
         public void Jump()
@@ -117,29 +117,26 @@ namespace Player
             transform.Rotate(0, 180, 0);
             _faceRight = !_faceRight;
         }
-        
-        private void PlayAnimation(AnimationType animationType, bool active)
+
+        public void StartAttack()
         {
-            if (!active)
-            {
-                if (_currentAnimationType == AnimationType.Idle || _currentAnimationType != animationType)
-                    return;
-
-                _currentAnimationType = AnimationType.Idle;
-                PlayAnimation(_currentAnimationType);
-                return;
-            }
-            
-            if (_currentAnimationType > animationType)
+            if (!_animator.PlayAnimation(AnimationType.Attack, true))
                 return;
 
-            _currentAnimationType = animationType;
-            PlayAnimation(_currentAnimationType);
+            _animator.ActionRequested += Attack;
+            _animator.AnimationEnded += EndAttack;
         }
 
-        private void PlayAnimation(AnimationType animationType)
+        private void Attack()
         {
-            _animator.SetInteger(nameof(AnimationType), (int)animationType);
+            Debug.Log("Attack");
+        }
+
+        private void EndAttack()
+        {
+            _animator.ActionRequested -= Attack;
+            _animator.AnimationEnded -= EndAttack;
+            _animator.PlayAnimation(AnimationType.Attack, false);
         }
     }
 }
