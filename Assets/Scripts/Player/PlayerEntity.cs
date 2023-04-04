@@ -1,3 +1,4 @@
+using Assets.Scripts.Player;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,92 +9,99 @@ namespace Player
     [RequireComponent(typeof(Rigidbody2D))]
     public class PlayerEntity : MonoBehaviour
     {
+        [Header("Animation")]
+        [SerializeField] private Animator _animator;
+
         [Header("HorizontalMovement")]
         [SerializeField] private float _horizontalSpeed;
         [SerializeField] private bool _faceRight;
 
-        //[Header("VerticalMovement")]
-        //[SerializeField] private float _verticalSpeed;
-        //[SerializeField] private float _minSize;
-        //[SerializeField] private float _maxSize;
-        //[SerializeField] private float _minVerticalPosition;
-        //[SerializeField] private float _maxVerticalPosition;
-
         [Header("Jump")]
         [SerializeField] private float _jumpForce;
-        [SerializeField] private float _gravityScale;
+        [SerializeField] private float _gravityScale;       
+        [SerializeField] private Transform _groundCheck;
+        [SerializeField] private float _groundCheckRadius;
+        [SerializeField] private LayerMask _groundLayer;
 
+        //for jumping mechanics
         private Rigidbody2D _rigidbody;
+        private bool _isOnGround;
+        private bool _isJumping;
+        private int counter;
 
-        //private float _sizeModificator;
-        [SerializeField]  private bool _isJumping;
-        private float _startJumpVerticalPosition;
+        //for animation
+        private Vector2 _movement;
+        private AnimationType _currentAnimationType;
+        
 
         // Start is called before the first frame update
         private void Start()
         {
             _rigidbody = GetComponent<Rigidbody2D>();
-
-            //float positionDifference = _maxVerticalPosition - _minVerticalPosition;
-            //float sizeDifference = _maxSize - _minSize;
-            //_sizeModificator = sizeDifference / positionDifference;
-            //UpdateSize();
+            _isOnGround = IsOnGround();
+            _isJumping = false;
+            counter = 0;
         }
 
         private void Update()
         {
             if (_isJumping)
             {
+                counter++;
                 UpdateJump();
             }
+
+            UpdateAnimations();
+        }
+
+        private void UpdateAnimations()
+        {
+            PlayAnimation(AnimationType.Idle, true);
+            PlayAnimation(AnimationType.Walk, _movement.magnitude > 0);
+            PlayAnimation(AnimationType.Jump, _isJumping);
         }
 
         public void Jump()
         {
-            if (_isJumping)
+            if (!_isOnGround)
             {
                 return;
             }
-
+            _isOnGround = false;
             _isJumping = true;
             _rigidbody.AddForce(Vector2.up * _jumpForce);
             _rigidbody.gravityScale = _gravityScale;
-            _startJumpVerticalPosition = transform.position.y;
+        }
+
+        private bool IsOnGround()
+        {
+            return Physics2D.OverlapCircle(_groundCheck.position, _groundCheckRadius, _groundLayer);
+        }
+
+        private void UpdateJump()
+        {
+            if (_isOnGround && counter > 2)
+            {
+                ResetJump();
+                return;
+            }
+            _isOnGround = IsOnGround();
+        }
+
+        private void ResetJump()
+        {
+            _isJumping = false;
+            counter = 0;
         }
 
         public void MoveHorizontally(float direction)
         {
+            _movement.x = direction;
             SetDirection(direction);
             Vector2 velocity = _rigidbody.velocity;
             velocity.x = direction * _horizontalSpeed;
             _rigidbody.velocity = velocity;
         }
-
-        //public void MoveVertically(float direction)
-        //{
-        //    if (_isJumping)
-        //        return;
-
-        //    Vector2 velocity = _rigidbody.velocity;
-        //    velocity.y = direction * _verticalSpeed;
-        //    _rigidbody.velocity = velocity;
-
-        //    if (direction == 0)
-        //    {
-        //        return;
-        //    }
-
-        //    float verticalPosition = Mathf.Clamp(transform.position.y, _minVerticalPosition, _maxVerticalPosition);
-        //    _rigidbody.position = new Vector2(_rigidbody.position.x, verticalPosition);
-        //    UpdateSize();
-        //}
-
-        //private void UpdateSize()
-        //{
-        //    float verticalDelta = _maxVerticalPosition - transform.position.y;
-        //    float currentSizeModificator = _minSize + _sizeModificator * verticalDelta;
-        //    transform.localScale = Vector2.one * currentSizeModificator;
-        //}
 
         private void SetDirection(float direction)
         {
@@ -109,23 +117,29 @@ namespace Player
             transform.Rotate(0, 180, 0);
             _faceRight = !_faceRight;
         }
-
-        private void UpdateJump()
+        
+        private void PlayAnimation(AnimationType animationType, bool active)
         {
-            if(_rigidbody.velocity.y < 0 && _rigidbody.position.y <= _startJumpVerticalPosition)
+            if (!active)
             {
-                ResetJump();
+                if (_currentAnimationType == AnimationType.Idle || _currentAnimationType != animationType)
+                    return;
+
+                _currentAnimationType = AnimationType.Idle;
+                PlayAnimation(_currentAnimationType);
                 return;
             }
+            
+            if (_currentAnimationType > animationType)
+                return;
 
-
+            _currentAnimationType = animationType;
+            PlayAnimation(_currentAnimationType);
         }
 
-        private void ResetJump()
+        private void PlayAnimation(AnimationType animationType)
         {
-            _isJumping = false;
-            //_rigidbody.position = new Vector2(_rigidbody.position.x, _startJumpVerticalPosition);
-            //_rigidbody.gravityScale = 0;
+            _animator.SetInteger(nameof(AnimationType), (int)animationType);
         }
     }
 }
