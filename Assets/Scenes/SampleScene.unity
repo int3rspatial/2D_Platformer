@@ -5977,6 +5977,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   _isOnGround: 0
+  _isJumping: 0
 --- !u!114 &1443592177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6808,6 +6809,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   _isOnGround: 0
+  _isJumping: 0
 --- !u!114 &665410810821329964
 MonoBehaviour:
   m_ObjectHideFlags: 0

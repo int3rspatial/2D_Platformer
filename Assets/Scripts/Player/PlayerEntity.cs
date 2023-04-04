@@ -23,23 +23,31 @@ namespace Player
         [SerializeField] private float _groundCheckRadius;
         [SerializeField] private LayerMask _groundLayer;
 
+        //for jumping mechanics
         private Rigidbody2D _rigidbody;
         private bool _isOnGround;
+        private bool _isJumping;
+        private int counter;
 
+        //for animation
         private Vector2 _movement;
         private AnimationType _currentAnimationType;
-        private bool _isJumping;
+        
 
         // Start is called before the first frame update
         private void Start()
         {
             _rigidbody = GetComponent<Rigidbody2D>();
+            _isOnGround = IsOnGround();
+            _isJumping = false;
+            counter = 0;
         }
 
         private void Update()
         {
-            if (!_isOnGround)
+            if (_isJumping)
             {
+                counter++;
                 UpdateJump();
             }
 
@@ -55,14 +63,14 @@ namespace Player
 
         public void Jump()
         {
-            if (!IsOnGround())
+            if (!_isOnGround)
             {
                 return;
             }
-            _isOnGround = true;
+            _isOnGround = false;
+            _isJumping = true;
             _rigidbody.AddForce(Vector2.up * _jumpForce);
             _rigidbody.gravityScale = _gravityScale;
-            _isJumping = true;
         }
 
         private bool IsOnGround()
@@ -72,19 +80,18 @@ namespace Player
 
         private void UpdateJump()
         {
-            _isOnGround = IsOnGround();
-
-            if (_isOnGround)
+            if (_isOnGround && counter > 2)
             {
                 ResetJump();
                 return;
             }
+            _isOnGround = IsOnGround();
         }
 
         private void ResetJump()
         {
-            _isOnGround = false;
             _isJumping = false;
+            counter = 0;
         }
 
         public void MoveHorizontally(float direction)
