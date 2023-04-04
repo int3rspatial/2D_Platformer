@@ -49,7 +49,7 @@ namespace Player
         {
             PlayAnimation(AnimationType.Idle, true);
             PlayAnimation(AnimationType.Walk, _movement.magnitude > 0);
-            //PlayAnimation(AnimationType.Jump, !_isOnGround);
+            PlayAnimation(AnimationType.Jump, _isOnGround);
         }
 
         public void Jump()
