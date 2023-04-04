@@ -28,6 +28,7 @@ namespace Player
 
         private Vector2 _movement;
         private AnimationType _currentAnimationType;
+        private bool _isJumping;
 
         // Start is called before the first frame update
         private void Start()
@@ -49,7 +50,7 @@ namespace Player
         {
             PlayAnimation(AnimationType.Idle, true);
             PlayAnimation(AnimationType.Walk, _movement.magnitude > 0);
-            PlayAnimation(AnimationType.Jump, _isOnGround);
+            PlayAnimation(AnimationType.Jump, _isJumping);
         }
 
         public void Jump()
@@ -61,6 +62,7 @@ namespace Player
             _isOnGround = true;
             _rigidbody.AddForce(Vector2.up * _jumpForce);
             _rigidbody.gravityScale = _gravityScale;
+            _isJumping = true;
         }
 
         private bool IsOnGround()
@@ -82,6 +84,7 @@ namespace Player
         private void ResetJump()
         {
             _isOnGround = false;
+            _isJumping = false;
         }
 
         public void MoveHorizontally(float direction)
