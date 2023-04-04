@@ -1,4 +1,4 @@
-﻿namespace Assets.Scripts.Player
+﻿namespace Assets.Scripts.Core.Animation
 {
     public enum AnimationType
     {

@@ -1,4 +1,5 @@
-﻿using Player;
+﻿using Assets.Scripts.InputReader;
+using Player;
 using System.Collections.Generic;
 using System.Linq;
 

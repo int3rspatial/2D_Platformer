@@ -5502,6 +5502,8 @@ MonoBehaviour:
   _jumpButton: {fileID: 1128099787}
   _attackButton: {fileID: 688574819}
   _inventoryButton: {fileID: 0}
+  <Jump>k__BackingField: 0
+  <Attack>k__BackingField: 0
 --- !u!1 &1017708074
 GameObject:
   m_ObjectHideFlags: 0
@@ -6374,8 +6376,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 0}
-  _horizontalSpeed: 8
-  _faceRight: 1
+  _horizontalMovementData:
+    <HorizontalSpeed>k__BackingField: 0
+    <FaceRight>k__BackingField: 0
   _jumpForce: 640
   _gravityScale: 1.6
   _groundCheck: {fileID: 1419141414}
@@ -7312,8 +7315,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 665410810821329964}
-  _horizontalSpeed: 8
-  _faceRight: 0
+  _horizontalMovementData:
+    <HorizontalSpeed>k__BackingField: 8
+    <FaceRight>k__BackingField: 0
   _jumpForce: 640
   _gravityScale: 1.6
   _groundCheck: {fileID: 57576038}

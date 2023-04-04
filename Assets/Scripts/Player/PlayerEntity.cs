@@ -1,3 +1,6 @@
+using Assets.Scripts.Core.Animation;
+using Assets.Scripts.Core.Movement.Controller;
+using Assets.Scripts.Core.Movement.Data;
 using Assets.Scripts.Player;
 using UnityEngine;
 
@@ -9,42 +12,50 @@ namespace Player
         [Header("Animation")]
         [SerializeField] private AnimationController _animator;
 
-        [Header("HorizontalMovement")]
-        [SerializeField] private float _horizontalSpeed;
-        [SerializeField] private bool _faceRight;
+        //[Header("HorizontalMovement")]
+        [SerializeField] private HorizontalMovementData _horizontalMovementData;
 
-        [Header("Jump")]
-        [SerializeField] private float _jumpForce;
-        [SerializeField] private float _gravityScale;       
-        [SerializeField] private Transform _groundCheck;
-        [SerializeField] private float _groundCheckRadius;
-        [SerializeField] private LayerMask _groundLayer;
-
-        //for jumping mechanics
+        [SerializeField] private JumpData _jumpData;
+        //[Header("Jump")]
+        //[SerializeField] private float _jumpForce;
+        //[SerializeField] private float _gravityScale;       
+        //[SerializeField] private Transform _groundCheck;
+        //[SerializeField] private float _groundCheckRadius;
+        //[SerializeField] private LayerMask _groundLayer;
+        
         private Rigidbody2D _rigidbody;
-        private bool _isOnGround;
-        private bool _isJumping;
-        private int counter;
+        
+        ////for jumping mechanics
+        //private bool _isOnGround;
+        //private bool _isJumping;
+        //private int counter;
 
         //for animation
-        private Vector2 _movement;
         private AnimationType _currentAnimationType;
+
+        private HorizontalMover _horizontalMover;
+        private Jumper _jumper;
         
 
         // Start is called before the first frame update
         private void Start()
         {
             _rigidbody = GetComponent<Rigidbody2D>();
-            _isOnGround = IsOnGround();
-            _isJumping = false;
-            counter = 0;
+
+            _horizontalMover = new HorizontalMover(_rigidbody, _horizontalMovementData);
+
+            _jumper = new Jumper(_rigidbody, _jumpData);
+
+            _jumper.IsOnGroundVar = _jumper.IsOnGround();
+            _jumper.IsJumping = false;
+            _jumper.Counter = 0;
         }
 
         private void Update()
         {
-            if (_isJumping)
+            if (_jumper.IsJumping)
             {
-                counter++;
+                _jumper.Counter++;
                 UpdateJump();
             }
 
@@ -54,65 +65,23 @@ namespace Player
         private void UpdateAnimations()
         {
             _animator.PlayAnimation(AnimationType.Idle, true);
-            _animator.PlayAnimation(AnimationType.Walk, _movement.magnitude > 0);
-            _animator.PlayAnimation(AnimationType.Jump, _isJumping);
+            _animator.PlayAnimation(AnimationType.Walk, _horizontalMover.IsMoving);
+            _animator.PlayAnimation(AnimationType.Jump, _jumper.IsJumping);
         }
 
         public void Jump()
         {
-            if (!_isOnGround)
-            {
-                return;
-            }
-            _isOnGround = false;
-            _isJumping = true;
-            _rigidbody.AddForce(Vector2.up * _jumpForce);
-            _rigidbody.gravityScale = _gravityScale;
-        }
-
-        private bool IsOnGround()
-        {
-            return Physics2D.OverlapCircle(_groundCheck.position, _groundCheckRadius, _groundLayer);
+            _jumper.Jump();
         }
 
         private void UpdateJump()
         {
-            if (_isOnGround && counter > 2)
-            {
-                ResetJump();
-                return;
-            }
-            _isOnGround = IsOnGround();
-        }
-
-        private void ResetJump()
-        {
-            _isJumping = false;
-            counter = 0;
+            _jumper.UpdateJump();
         }
 
         public void MoveHorizontally(float direction)
         {
-            _movement.x = direction;
-            SetDirection(direction);
-            Vector2 velocity = _rigidbody.velocity;
-            velocity.x = direction * _horizontalSpeed;
-            _rigidbody.velocity = velocity;
-        }
-
-        private void SetDirection(float direction)
-        {
-            if((_faceRight && direction < 0) || 
-                (!_faceRight && direction > 0))
-            {
-                Flip();
-            }
-        }
-
-        private void Flip()
-        {
-            transform.Rotate(0, 180, 0);
-            _faceRight = !_faceRight;
+            _horizontalMover.MoveHorizontally(direction);
         }
 
         public void StartAttack()
