@@ -5976,8 +5976,6 @@ MonoBehaviour:
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _isOnGround: 0
-  _isJumping: 0
 --- !u!114 &1443592177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6798,7 +6796,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab2da6a155b114f46beeb0f298ed10ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 607436312794845089}
+  _animator: {fileID: 665410810821329964}
   _horizontalSpeed: 8
   _faceRight: 0
   _jumpForce: 640
@@ -6808,8 +6806,6 @@ MonoBehaviour:
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _isOnGround: 0
-  _isJumping: 0
 --- !u!114 &665410810821329964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6819,11 +6815,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 665410810821329959}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc4c3d640a58bcf4fb08c732088e858f, type: 3}
+  m_Script: {fileID: 11500000, guid: 560016608d5e12e4396ec8a79aeb3868, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 607436312794845089}
-  _attackAnimationKey: Attack
 --- !u!1 &665410811268206877
 GameObject:
   m_ObjectHideFlags: 0
