@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.InputReader;
+﻿using Assets.Scripts.Player;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -23,7 +23,6 @@ public class ExternalDevicesInputReader : IEntityInputSource
 
     private bool IsPointerOverUI()
     {
-        //maybe make sence to change && for ||
         return EventSystem.current.currentSelectedGameObject.name == "AttackButton" && EventSystem.current.IsPointerOverGameObject();
     }
 

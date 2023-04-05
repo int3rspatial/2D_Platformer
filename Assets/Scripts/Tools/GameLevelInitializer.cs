@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.InputReader;
-using Assets.Scripts.Player;
+﻿using Assets.Scripts.Player;
 using Player;
 using System.Collections.Generic;
 using UnityEngine;

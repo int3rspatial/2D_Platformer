@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Assets.Scripts.Core.Animation
+namespace Assets.Scripts.Player.PlayerAnimation
 {
     [RequireComponent(typeof(Animator))]
     public class UnityAnimationController: AnimationController
